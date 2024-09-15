@@ -1,0 +1,107 @@
+test> use library
+switched to db library
+library> db
+library
+library> db.books.insertOne({title:"The Great Gatsby", author:"F.Scott Fitzgerald",published_year:1925}
+...
+... db.books.find()
+Uncaught:
+SyntaxError: Unexpected token, expected "," (3:0)
+
+  1 | db.books.insertOne({title:"The Great Gatsby", author:"F.Scott Fitzgerald",published_year:1925}
+  2 |
+> 3 | db.books.find()
+    | ^
+  4 |
+
+library> db.books.find()
+
+library>  db.books.insertOne({title:"The Great Gatsby", author:"F.Scott Fitzgerald",published_year:1925}
+... clear
+Uncaught:
+SyntaxError: Unexpected token, expected "," (2:0)
+
+  1 |  db.books.insertOne({title:"The Great Gatsby", author:"F.Scott Fitzgerald",published_year:1925}
+> 2 | clear
+    | ^
+  3 |
+
+library> db.books.insert({title:"The Great Gatsby", author:"F.Scott Fitzgerald",published_year:1925})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('66e6d62d92a8d086c72710bc') }
+}
+library> db.books.find()
+[
+  {
+    _id: ObjectId('66e6d62d92a8d086c72710bc'),
+    title: 'The Great Gatsby',
+    author: 'F.Scott Fitzgerald',
+    published_year: 1925
+  }
+]
+library> db.books.find({author:"J.K. Rowling"})
+
+library> db.books.find({author:"J.K. Rowling"})
+
+library> db.books.find().sort({published_year:1}).limit(1)
+[
+  {
+    _id: ObjectId('66e6d62d92a8d086c72710bc'),
+    title: 'The Great Gatsby',
+    author: 'F.Scott Fitzgerald',
+    published_year: 1925
+  }
+]
+library> db.books.update({title:"The Catcher in the Rye"},{$set:{published_year:2024} })
+DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+library> db.books.updateMany({$set:{genre:"Mystery"}})
+MongoInvalidArgumentError: Update document requires atomic operators
+library> db.books.updateMany({},{$set:{genre:"Mystery"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+library> db.books.remove({title:"1984"})
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 0 }
+library> db.books.remove({published_year:{#lt:2000}})
+Uncaught:
+SyntaxError: Unexpected private name. (1:33)
+
+> 1 | db.books.remove({published_year:{#lt:2000}})
+    |                                  ^
+  2 |
+
+library> db.books.remove({published_year:{lt:2000}})
+{ acknowledged: true, deletedCount: 0 }
+library> db.books.find().sort({published_year:-1}).limit(3)
+[
+  {
+    _id: ObjectId('66e6d62d92a8d086c72710bc'),
+    title: 'The Great Gatsby',
+    author: 'F.Scott Fitzgerald',
+    published_year: 1925,
+    genre: 'Mystery'
+  }
+]
+library> db.books.find({title:$regex:/(MongoDB|NoSQL)/,$options:'i'}})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:27)
+
+> 1 | db.books.find({title:$regex:/(MongoDB|NoSQL)/,$options:'i'}})
+    |                            ^
+  2 |
+
+library> db.books.find({title:{$regex:/(MongoDB|NoSQL)/,$options:'i'}})
